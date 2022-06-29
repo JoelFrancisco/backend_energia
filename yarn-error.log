@@ -1,0 +1,36 @@
+Arguments: 
+  /home/joel/.nvm/versions/node/v16.13.1/bin/node /home/joel/.nvm/versions/node/v16.13.1/bin/yarn init
+
+PATH: 
+  /home/joel/tools/idea-IC-211.7142.45/bin:/home/joel/Android/Sdk/tools/bin:/home/joel/Android/Sdk/platform-tools:/home/joel/Android/Sdk/emulator:/home/joel/Android/Sdk/tools:/home/joel/.asdf/shims:/home/joel/.asdf/bin:/home/joel/.local/bin/go/bin:/home/joel/.pyenv/plugins/pyenv-virtualenv/shims:/home/joel/.pyenv/shims:/home/joel/.pyenv/bin:/home/joel/.poetry/bin:/home/joel/.deno/bin:/home/joel/.nvm/versions/node/v16.13.1/bin:/home/joel/bin:/usr/local/bin:/home/joel/tools/idea-IC-211.7142.45/bin:/home/joel/Android/Sdk/tools/bin:/home/joel/Android/Sdk/platform-tools:/home/joel/Android/Sdk/emulator:/home/joel/Android/Sdk/tools:/home/joel/.local/bin/go/bin:/home/joel/.pyenv/plugins/pyenv-virtualenv/shims:/home/joel/.pyenv/shims:/home/joel/.pyenv/bin:/home/joel/tools/miniconda/condabin:/home/joel/.poetry/bin:/home/joel/.deno/bin:/home/joel/.nvm/versions/node/v16.13.1/bin:/home/joel/.zinit/polaris/bin:/home/joel/bin:/usr/local/bin:/home/joel/.poetry/bin:/home/joel/.cargo/bin:/home/joel/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/joel/.dotnet/tools
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.13.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/home/joel/.nvm/versions/node/v16.13.1/lib/node_modules/yarn/lib/cli.js:137143:13)
+      at Interface.emit (node:events:390:28)
+      at Interface._ttyWrite (node:readline:1081:16)
+      at ReadStream.onkeypress (node:readline:288:10)
+      at ReadStream.emit (node:events:390:28)
+      at emitKeys (node:internal/readline/utils:358:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:61:36)
+      at ReadStream.emit (node:events:390:28)
+      at addChunk (node:internal/streams/readable:315:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

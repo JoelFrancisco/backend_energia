@@ -1,0 +1,22 @@
+{
+  "name": "backend_energia",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "author": "JoelFrancisco <joelfranciscofilho@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "express": "^4.18.1",
+    "jest": "^28.1.1",
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  },
+  "scripts": {
+    "test": "yarn node --experimental-vm-modules $(yarn bin jest)"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.3"
+  }
+}
