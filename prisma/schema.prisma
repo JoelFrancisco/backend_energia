@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model DadosGerais {
+  id                          Int   @id @default(autoincrement())
+  consumo_total_energia_anual Float
+  irradiacao_local            Float @default(4.38)
+  temperatura_minima_ambiente Float @default(0)
+  constante_gstc              Float @default(1)
+  taxa_desempenho_sistema     Float @default(0.8)
+}
+
+model DadosModulos {
+  id                            Int   @id @default(autoincrement())
+  potencia_maxima_modulo        Float
+  tensao_modulo_circuito_aberto Float
+  corrente_curto_circuito       Float
+}
+
+model DadosInversor {
+  id                               Int   @id @default(autoincrement())
+  potencia_maxima_ca_inversor      Float
+  tensao_maxima_mppt               Float
+  tensao_minima_mppt               Float
+  corrente_maxima_mppt             Float
+  numero_mppts                     Int
+  quantidade_inversores_frequencia Int
+}
+
+model Mppt {
+  id             Int          @id @default(autoincrement())
+  numero_strings Int
+  modulos_string Int
+  azimute        Int
+  inclinacao     Int
+  dadosArranjoId Int
+  DadosArranjo   DadosArranjo @relation(fields: [dadosArranjoId], references: [id])
+}
+
+model DadosArranjo {
+  id                   Int    @id @default(autoincrement())
+  numero_total_modulos Int
+  mppts                Mppt[]
+}
