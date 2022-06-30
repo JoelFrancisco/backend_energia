@@ -1,3 +1,4 @@
+/*
 describe("validaPotenciaInversor", () => {
   it("Deve retornar false pois possui menos módulos do que o exigido", () => {
     const { mensagem } = validaGeracaoFotovotaica({
@@ -35,3 +36,4 @@ describe("validaPotenciaInversor", () => {
     expect(valido).toBe(true);
   });
 });
+*/

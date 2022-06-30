@@ -1,7 +1,6 @@
 {
   "name": "backend_energia",
   "version": "1.0.0",
-  "type": "module",
   "main": "index.js",
   "author": "JoelFrancisco <joelfranciscofilho@gmail.com>",
   "license": "MIT",
