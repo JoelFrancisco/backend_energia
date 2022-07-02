@@ -1,19 +1,27 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { validaGeracaoFotovotaica } from "./validaGeracaoFotovotaica";
-import { validaPotenciaInversor } from "./validaPotenciaInversor";
 import { calculaGeracaoFotovotaica } from "./calculaGeracaoFotovotaica";
 import { calculaPotenciaInversor } from "./calculaPotenciaInversor";
 import { validaQuantidadeDeMppts } from "./validaQuantidadeDeMppts";
 import { validaTensaoDeOperacaoNoMppts } from "./validaTensaoDeOperacaoNoMppts";
 import { validaCorrenteDeOperacaoNoMppts } from "./validaCorrenteDeOperacaoNoMppts";
+import cors from 'cors';
+import { validaPotenciaInversor } from "./validaPotenciaInversor";
+//import { calculaTensaoDeOperacaoNoMppts } from "./calculaTensaoDeOperacaoNoMppts";
 
 const PORT = 8080;
 const app = express();
 
+app.use(express.json());
+app.use(cors());
+
 const prisma = new PrismaClient();
 
 app.post("/salvar", async (req, res) => {
+  console.log("Chegou");
+  console.log(req.body);
+
   const erros = [];
 
   const dtoGeracaoFotovotaica = {
@@ -43,8 +51,7 @@ app.post("/salvar", async (req, res) => {
       req.body.DadosInversor.quantidade_inversores_frequencia,
   };
 
-  const { mensagem: mensagemPotenciaInversor, valido: validoPotenciaInversor } =
-    validaPotenciaInversor(dtoPotenciaInversor);
+  const { mensagem: mensagemPotenciaInversor, valido: validoPotenciaInversor } = validaPotenciaInversor(dtoPotenciaInversor);
 
   if (!validoPotenciaInversor) {
     erros.push(mensagemPotenciaInversor);
@@ -60,7 +67,7 @@ app.post("/salvar", async (req, res) => {
   const {
     mensagem: mensagemQuantidadeDeMppts,
     valido: validoQuantidadeDeMppts,
-  } = await validaQuantidadeDeMppts(prisma, dtoQuantidadeDeMppts);
+  } = await validaQuantidadeDeMppts(dtoQuantidadeDeMppts);
 
   if (!validoQuantidadeDeMppts) {
     erros.push(mensagemQuantidadeDeMppts);
@@ -153,15 +160,20 @@ app.post("/salvar", async (req, res) => {
   });
 });
 
-app.get("/relatorio", (req, res) => {
+app.get("/relatorio", async (req, res) => {
+  const dadosGerais = await prisma.dadosGerais.findFirst();
+  const dadosArranjo = await prisma.dadosArranjo.findFirst();
+  const dadosModulos = await prisma.dadosModulos.findFirst();
+  const dadosInversor = await prisma.dadosInversor.findFirst();
+
   const {
     minimo: minimoGeracaoEnergia,
     presente: presenteGeracaoEnergia,
     maximo: maximoGeracaoEnergia,
   } = calculaGeracaoFotovotaica({
-    consumoTotalEnergiaAnual: req.body.consumo_total_energia_anual,
-    numeroTotalDeModulos: req.body.numero_total_modulos,
-    potenciaMaximaDoModulo: req.body.potencia_maxima_do_modulo,
+    consumoTotalEnergiaAnual: dadosGerais?.consumo_total_energia_anual,
+    numeroTotalDeModulos: dadosArranjo?.numero_total_modulos,
+    potenciaMaximaDoModulo: dadosModulos?.potencia_maxima_modulo,
   });
 
   const {
@@ -169,11 +181,28 @@ app.get("/relatorio", (req, res) => {
     presente: presentePotenciaInversor,
     maximo: maximoPotenciaInversor,
   } = calculaPotenciaInversor({
-    numeroTotalDeModulos: req.body.numero_total_modulos,
-    potenciaMaximaDoModulo: req.body.potencia_maxima_do_modulo,
-    potenciaMaximaInversor: req.body.potencia_maxima_inversor,
-    quantidadeInversoresDeFrequencia:
-      req.body.quantidade_inversores_de_frequencia,
+    numeroTotalDeModulos: dadosArranjo?.numero_total_modulos,
+    potenciaMaximaDoModulo: dadosModulos?.potencia_maxima_modulo,
+    potenciaMaximaInversor: dadosInversor?.potencia_maxima_ca_inversor,
+    quantidadeInversoresDeFrequencia: dadosInversor?.quantidade_inversores_frequencia,
+  });
+
+  /*
+  const {
+    minima: minimaTensaoDeOperacaoNoMppts,
+    presente: presenteTensaoDeOperacaoNoMppts,
+    maximo: maximoTensaoDeOperacaoNoMppts,
+  } = calculaTensaoDeOperacaoNoMppts({
+    tensaoMinimaMppt: dadosInversor?.tensao_minima_mppt,
+    tensaoModuloCircuitoAberto: dadosModulos?.tensao_modulo_circuito_aberto,
+    potenciaMaximaDoModulo: dadosModulos?.potencia_maxima_modulo,
+    consumoTotalEnergiaAnual: dadosGerais?.consumo_total_energia_anual
+  });
+  */
+
+  return res.status(200).json({
+    geracaoFotovotaica: { minimoGeracaoEnergia, presenteGeracaoEnergia, maximoGeracaoEnergia },
+    potenciaInversor: { minimoPotenciaInversor, presentePotenciaInversor, maximoPotenciaInversor },
   });
 });
 
